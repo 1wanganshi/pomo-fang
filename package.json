@@ -1,0 +1,64 @@
+{
+  "name": "pomo-fang-desktop",
+  "version": "0.1.0",
+  "description": "Desktop app wrapper for Pomo Fang.",
+  "main": "electron/main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "build": "node --check shared.js && node --check app.js && node --check admin.js && node --check module.js && node --check desktop.js && node --check electron/main.js && node --check electron/preload.js",
+    "package:win": "npm run build && electron-builder --win --x64",
+    "package:dir": "npm run build && electron-builder --dir"
+  },
+  "devDependencies": {
+    "electron": "^42.3.3",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "com.pomofang.desktop",
+    "productName": "泼墨坊",
+    "asar": true,
+    "icon": "assets/icon.ico",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "index.html",
+      "module.html",
+      "admin.html",
+      "desktop.html",
+      "assets/**/*",
+      "styles.css",
+      "shared.js",
+      "app.js",
+      "module.js",
+      "admin.js",
+      "desktop.js",
+      "electron/**/*"
+    ],
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "泼墨坊"
+    }
+  }
+}
