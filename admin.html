@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1280, initial-scale=1.0" />
+    <title>后台管理 - 泼墨坊</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="admin-page">
+    <main class="admin-console" aria-label="泼墨坊后台管理">
+      <aside class="admin-sidebar" aria-label="后台导航">
+        <div class="admin-brand">
+          <p class="eyebrow">AI 作图后台</p>
+          <h1>泼墨坊</h1>
+        </div>
+
+        <nav class="admin-nav">
+          <button class="admin-nav-item active" type="button" data-panel="overview">总览</button>
+          <button class="admin-nav-item" type="button" data-panel="models">模型管理</button>
+          <button class="admin-nav-item" type="button" data-panel="modules">模块管理</button>
+          <button class="admin-nav-item" type="button" data-panel="preview">前台预览</button>
+        </nav>
+
+        <div class="admin-sidebar-footer">
+          <a class="secondary-button nav-link-button" href="./index.html" target="_blank">打开前台</a>
+          <button class="ghost-button" id="resetDemoButton" type="button">重置演示数据</button>
+        </div>
+      </aside>
+
+      <section class="admin-main">
+        <header class="admin-header">
+          <div>
+            <p class="eyebrow" id="panelEyebrow">Dashboard</p>
+            <h2 id="panelTitle">总览</h2>
+          </div>
+          <div class="admin-header-actions">
+            <span class="status-pill" id="activeModelPill">模型加载中</span>
+            <span class="status-pill" id="visibleModulePill">0 个模块</span>
+          </div>
+        </header>
+
+        <section class="admin-panel active" id="overviewPanel" data-panel="overview" aria-label="后台总览">
+          <div class="metric-grid">
+            <article class="metric-card">
+              <p>模型总数</p>
+              <strong id="modelMetric">0</strong>
+            </article>
+            <article class="metric-card">
+              <p>前台模块</p>
+              <strong id="visibleModuleMetric">0</strong>
+            </article>
+            <article class="metric-card">
+              <p>模块总数</p>
+              <strong id="moduleMetric">0</strong>
+            </article>
+            <article class="metric-card">
+              <p>最近生成</p>
+              <strong id="promptMetric">无</strong>
+            </article>
+          </div>
+
+          <section class="desktop-band">
+            <div class="section-title">
+              <p class="eyebrow">工作台</p>
+              <h2>当前配置</h2>
+            </div>
+            <div class="overview-split">
+              <div class="overview-box">
+                <h3>启用模型</h3>
+                <p id="activeModelSummary">暂无模型</p>
+              </div>
+              <div class="overview-box">
+                <h3>前台入口</h3>
+                <div class="pill-list" id="visibleModuleSummary"></div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section class="admin-panel" id="modelsPanel" data-panel="models" aria-label="模型管理">
+          <section class="desktop-band">
+            <div class="section-title">
+              <p class="eyebrow">模型</p>
+              <h2>添加大模型</h2>
+            </div>
+            <form class="admin-form desktop-form" id="modelForm">
+              <label>
+                名称
+                <input name="name" type="text" placeholder="例如 GPT Image" required />
+              </label>
+              <label>
+                服务商
+                <input name="provider" type="text" placeholder="OpenAI / 自定义" required />
+              </label>
+              <label>
+                API 地址
+                <input name="endpoint" type="url" placeholder="https://api.example.com/images" />
+              </label>
+              <label>
+                API Key
+                <input name="apiKey" type="password" placeholder="sk-..." />
+              </label>
+              <button class="primary-button" type="submit">添加模型</button>
+            </form>
+          </section>
+
+          <section class="desktop-band">
+            <div class="section-title">
+              <p class="eyebrow">列表</p>
+              <h2>模型列表</h2>
+            </div>
+            <div class="desktop-list" id="modelList" aria-label="模型列表"></div>
+          </section>
+        </section>
+
+        <section class="admin-panel" id="modulesPanel" data-panel="modules" aria-label="模块管理">
+          <section class="desktop-band">
+            <div class="section-title">
+              <p class="eyebrow">模块</p>
+              <h2>新增模块</h2>
+            </div>
+            <form class="admin-form desktop-form module-create-form" id="moduleForm">
+              <label>
+                模块名称
+                <input name="name" type="text" placeholder="例如 小红书封面" required />
+              </label>
+              <label>
+                说明
+                <input name="description" type="text" placeholder="前台卡片副标题" required />
+              </label>
+              <label>
+                画幅
+                <select name="ratio">
+                  <option value="3:4">3:4</option>
+                  <option value="1:1">1:1</option>
+                  <option value="4:3">4:3</option>
+                  <option value="16:9">16:9</option>
+                  <option value="9:16">9:16</option>
+                </select>
+              </label>
+              <label>
+                主题色
+                <select name="accent">
+                  <option value="vermilion">朱砂</option>
+                  <option value="jade">青玉</option>
+                  <option value="indigo">靛蓝</option>
+                  <option value="gold">鎏金</option>
+                  <option value="ink">墨黑</option>
+                </select>
+              </label>
+              <label>
+                输入提示项
+                <input name="fields" type="text" placeholder="主题、核心文案、受众" />
+              </label>
+              <label>
+                示例场景
+                <input name="examples" type="text" placeholder="新品宣传、节日活动、品牌日常" />
+              </label>
+              <label class="wide-field">
+                提示词
+                <textarea name="prompt" rows="5" placeholder="这个模块的固定提示词，会和前台输入合并"></textarea>
+              </label>
+              <label class="switch-field">
+                <input name="visible" type="checkbox" checked />
+                <span>前台显示</span>
+              </label>
+              <button class="primary-button" type="submit">添加模块</button>
+            </form>
+          </section>
+
+          <section class="desktop-band">
+            <div class="section-title">
+              <p class="eyebrow">列表</p>
+              <h2>模块列表</h2>
+            </div>
+            <div class="desktop-list module-admin-grid" id="moduleList" aria-label="模块列表"></div>
+          </section>
+        </section>
+
+        <section class="admin-panel" id="previewPanel" data-panel="preview" aria-label="前台预览">
+          <section class="desktop-band preview-band">
+            <div class="section-title">
+              <p class="eyebrow">预览</p>
+              <h2>用户前台</h2>
+            </div>
+            <div class="preview-layout">
+              <iframe class="front-preview-frame" title="前台预览" src="./index.html"></iframe>
+              <div class="preview-side">
+                <h3>可见模块</h3>
+                <div class="pill-list" id="previewModuleList"></div>
+              </div>
+            </div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./shared.js"></script>
+    <script src="./admin.js"></script>
+  </body>
+</html>
