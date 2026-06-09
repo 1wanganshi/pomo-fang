@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>泼墨坊</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="desktop-app-page">
+    <main class="unified-app" aria-label="泼墨坊桌面工作台">
+      <aside class="unified-sidebar">
+        <div class="unified-brand">
+          <p class="eyebrow">AI 作图工作台</p>
+          <h1>泼墨坊</h1>
+        </div>
+
+        <nav class="unified-nav" aria-label="主导航">
+          <button class="unified-nav-item active" type="button" data-view="create">创作</button>
+          <button class="unified-nav-item" type="button" data-view="modules">模块</button>
+          <button class="unified-nav-item" type="button" data-view="models">模型</button>
+        </nav>
+
+        <section class="desktop-status">
+          <p>当前模型</p>
+          <strong id="desktopActiveModel">未选择</strong>
+          <span id="desktopModuleCount">0 个模块可用</span>
+        </section>
+
+        <button class="unified-nav-item history-bottom-link" type="button" data-view="history">历史生成</button>
+      </aside>
+
+      <section class="unified-main">
+        <header class="unified-header">
+          <div>
+            <p class="eyebrow" id="desktopEyebrow">Create</p>
+            <h2 id="desktopTitle">一处完成配置、输入和出图</h2>
+          </div>
+          <div class="desktop-header-actions">
+            <button class="secondary-button compact-button" id="resetDesktopButton" type="button">重置演示数据</button>
+          </div>
+        </header>
+
+        <section class="desktop-view active" data-view="create" aria-label="创作工作台">
+          <div class="create-layout">
+            <section class="desktop-band module-picker-band">
+              <div class="section-title">
+                <div>
+                  <p class="eyebrow">模块</p>
+                  <h2>选择作图场景</h2>
+                </div>
+              </div>
+              <div class="desktop-module-list" id="desktopModuleList"></div>
+            </section>
+
+            <section class="desktop-band create-form-band">
+              <div class="section-title">
+                <div>
+                  <p class="eyebrow">输入</p>
+                  <h2 id="selectedModuleName">选择一个模块</h2>
+                </div>
+                <span class="ratio-pill" id="selectedModuleRatio">-</span>
+              </div>
+
+              <p class="desktop-muted" id="selectedModuleDescription">选择左侧模块后开始创作。</p>
+              <div class="hint-row" id="selectedModuleHints"></div>
+
+              <section class="desktop-poster-tool hidden" id="desktopPosterTool" aria-label="智能海报生成器"></section>
+
+              <label class="field-label" id="desktopBriefLabel" for="desktopBriefInput">内容</label>
+              <textarea id="desktopBriefInput" rows="8" placeholder="写下主题、产品、活动、文案或画面要求"></textarea>
+
+              <div class="style-row desktop-style-row" id="desktopStyleRow"></div>
+
+              <div class="generation-options" id="desktopGenerationOptions">
+                <div>
+                  <label class="field-label">画幅</label>
+                  <div class="option-row" id="desktopAspectRow"></div>
+                </div>
+                <div>
+                  <label class="field-label">清晰度</label>
+                  <div class="option-row" id="desktopResolutionRow"></div>
+                </div>
+              </div>
+
+              <button class="primary-button" id="desktopGenerateButton" type="button">生成图像</button>
+            </section>
+
+            <section class="desktop-band result-workbench">
+              <div class="section-title">
+                <div>
+                  <p class="eyebrow">结果</p>
+                  <h2 id="desktopResultTitle">等待生成</h2>
+                </div>
+                <span id="desktopResultModelName">未选择模型</span>
+              </div>
+              <canvas id="desktopResultCanvas" width="900" height="1200"></canvas>
+              <div class="action-row">
+                <button class="secondary-button" id="desktopDownloadButton" type="button">下载 PNG</button>
+                <button class="secondary-button" id="desktopCopyPromptButton" type="button">复制提示词</button>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="desktop-view" data-view="history" aria-label="历史生成">
+          <section class="desktop-band">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">历史生成</p>
+                <h2>找回之前生成的内容</h2>
+              </div>
+              <button class="secondary-button compact-button" id="clearHistoryButton" type="button">清空历史</button>
+            </div>
+            <div class="history-list" id="desktopHistoryList"></div>
+          </section>
+        </section>
+
+        <section class="desktop-view" data-view="modules" aria-label="模块管理">
+          <section class="desktop-band">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">模块管理</p>
+                <h2>新增作图模块</h2>
+              </div>
+            </div>
+            <form class="admin-form desktop-form module-create-form" id="desktopModuleForm">
+              <label>模块名称<input name="name" type="text" placeholder="例如 小红书封面" required /></label>
+              <label>说明<input name="description" type="text" placeholder="这个模块适合什么场景" required /></label>
+              <label>
+                画幅
+                <select name="ratio">
+                  <option value="3:4">3:4</option>
+                  <option value="1:1">1:1</option>
+                  <option value="4:3">4:3</option>
+                  <option value="16:9">16:9</option>
+                  <option value="9:16">9:16</option>
+                </select>
+              </label>
+              <label>
+                主题色
+                <select name="accent">
+                  <option value="vermilion">朱砂</option>
+                  <option value="jade">青玉</option>
+                  <option value="indigo">靛蓝</option>
+                  <option value="gold">鎏金</option>
+                  <option value="ink">墨黑</option>
+                </select>
+              </label>
+              <label>输入提示项<input name="fields" type="text" placeholder="主题、核心文案、受众" /></label>
+              <label>示例场景<input name="examples" type="text" placeholder="新品宣传、节日活动、品牌日常" /></label>
+              <label class="wide-field">提示词<textarea name="prompt" rows="5" placeholder="这个模块的固定提示词"></textarea></label>
+              <label class="switch-field"><input name="visible" type="checkbox" checked /><span>在创作区显示</span></label>
+              <button class="primary-button" type="submit">添加模块</button>
+            </form>
+          </section>
+
+          <section class="desktop-band">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">列表</p>
+                <h2>模块列表</h2>
+              </div>
+            </div>
+            <div class="desktop-list module-admin-grid" id="desktopModuleAdminList"></div>
+          </section>
+        </section>
+
+        <section class="desktop-view" data-view="models" aria-label="模型管理">
+          <section class="desktop-band">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">模型管理</p>
+                <h2>添加图像模型</h2>
+              </div>
+            </div>
+            <form class="admin-form desktop-form model-create-form" id="desktopModelForm">
+              <label>名称<input name="name" type="text" placeholder="例如 GPT Image" required /></label>
+              <label>服务商<input name="provider" type="text" placeholder="OpenAI / 自定义" required /></label>
+              <label>API 地址<input name="endpoint" type="url" placeholder="https://api.openai.com/v1" /></label>
+              <label>模型 ID<input name="modelId" type="text" placeholder="gpt-image-2" /></label>
+              <label>API Key<input name="apiKey" type="password" placeholder="sk-..." /></label>
+              <button class="primary-button" type="submit">添加模型</button>
+            </form>
+          </section>
+
+          <section class="desktop-band">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">列表</p>
+                <h2>模型列表</h2>
+              </div>
+            </div>
+            <div class="desktop-list" id="desktopModelList"></div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./shared.js?v=smart-poster-20260609"></script>
+    <script src="./desktop.js?v=smart-poster-20260609"></script>
+  </body>
+</html>
