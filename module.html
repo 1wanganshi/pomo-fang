@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>作图模块 - 泼墨坊</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell" aria-label="模块作图页">
+      <header class="topbar">
+        <a class="icon-link" id="backLink" href="./index.html" aria-label="返回首页">‹</a>
+        <div>
+          <p class="eyebrow">专属作图页</p>
+          <h1 id="moduleName">模块</h1>
+        </div>
+        <span class="ratio-pill" id="moduleRatio">-</span>
+      </header>
+
+      <section class="module-intro">
+        <p id="moduleDescription">加载中</p>
+        <div class="hint-row" id="moduleFields" aria-label="输入提示"></div>
+      </section>
+
+      <section class="poster-wizard hidden" id="posterWizard" aria-label="海报引导流程"></section>
+
+      <section class="workspace-panel quick-flow" aria-label="作图输入">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">输入内容</p>
+            <h2>告诉 AI 你要什么图</h2>
+          </div>
+        </div>
+
+        <label class="field-label" for="briefInput">内容</label>
+        <textarea id="briefInput" rows="6" placeholder="写下主题、产品、活动、文案或画面要求"></textarea>
+
+        <div class="style-row" id="styleRow" aria-label="风格"></div>
+
+        <button class="primary-button" id="generateButton" type="button">生成图像</button>
+      </section>
+
+      <section class="result-panel" id="resultPanel" aria-label="生成结果">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">结果</p>
+            <h2 id="resultTitle">等待生成</h2>
+          </div>
+          <span id="resultModelName">未选择模型</span>
+        </div>
+        <canvas id="resultCanvas" width="900" height="1200"></canvas>
+        <div class="action-row">
+          <button class="secondary-button" id="downloadButton" type="button">下载 PNG</button>
+          <button class="secondary-button" id="copyPromptButton" type="button">复制提示词</button>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./shared.js?v=smart-poster-20260609"></script>
+    <script src="./module.js?v=smart-poster-20260609"></script>
+  </body>
+</html>
